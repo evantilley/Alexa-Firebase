@@ -10,7 +10,8 @@ const { doc, setDoc, getDoc } = require("firebase/firestore");
 const { getFirestore, collection, getDocs } = require('firebase/firestore');
 
 // Your web app's Firebase configuration
-const firebaseConfig = 'INSERT_HERE'
+const firebaseConfig = 'FILL IN';
+
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
@@ -172,12 +173,11 @@ const ErrorHandler = {
     }
 };
 
-/**
- * This handler acts as the entry point for your skill, routing all request and response
- * payloads to the handlers above. Make sure any new handlers or interceptors you've
- * defined are included below. The order matters - they're processed top to bottom 
- * */
-exports.handler = Alexa.SkillBuilders.custom()
+const skillBuilder = Alexa.SkillBuilders.custom();
+ 
+ exports.handler = (event, context, callback) => {
+     context.callbackWaitsForEmptyEventLoop = false
+     return skillBuilder
     .addRequestHandlers(
         LaunchRequestHandler,
         HelloWorldIntentHandler,
@@ -189,4 +189,5 @@ exports.handler = Alexa.SkillBuilders.custom()
     .addErrorHandlers(
         ErrorHandler)
     .withCustomUserAgent('sample/hello-world/v1.2')
-    .lambda();
+    .lambda()(event, context, callback);
+ }
